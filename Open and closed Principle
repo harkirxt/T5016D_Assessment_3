@@ -1,0 +1,39 @@
+# open/ closed principle 
+# import math
+#use the syntax to draw the shapes
+
+import math
+
+# open and closes principle says that classes should be open to extension but closed to modification
+# import class
+class Shape:
+
+    def area(self):
+
+        pass
+
+# import shapes 
+
+class Rectangle(Shape):
+
+    def __init__(self, length, width):
+
+     self.length = length
+
+     self.width = width
+
+    def area(self):
+
+     return self.length * self.width
+
+class Circle(Shape):
+
+    def __init__(self, radius):
+
+     self.radius = radius
+
+def area(self):
+
+     return math.pi * self.radius ** 2 
+
+# In this similar code classes, modules and functions should be open for extension but closed for modification
