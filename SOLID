@@ -1,0 +1,124 @@
+class SupportTicket:
+# Add information within tickets
+    def __init__(self, staff_id, name, email, description):
+        self.ticket_id = None
+        self.staff_id = staff_id
+        self.name = name
+        self.email = email
+        self.description = description
+        self.response = "Not yet provided"
+        self.status = "Open"
+
+
+
+    def __str__(self):
+        return f"Ticket ID: {self.ticket_id}\nStaff ID: {self.staff_id}\nName: {self.name}\nEmail: {self.email}\nDescription: {self.description}\nResponse: {self.response}\nStatus: {self.status}"
+
+
+# different class that focus on the ticketing system and how it functions 
+class HelpdeskSystem:
+    ticket_id = 2001
+
+
+
+    def __init__(self):
+        self.open_tickets = 0
+        self.closed_tickets = 0
+        self.tickets = []
+
+
+# Function for submission "Password change"
+
+
+    def submit_ticket(self, staff_id, name, email, description):
+        new_ticket = SupportTicket(staff_id, name, email, description)
+        new_ticket.ticket_id = HelpdeskSystem.ticket_id
+        HelpdeskSystem.ticket_id += 1
+        self.tickets.append(new_ticket)
+        if "Password Change" in description:
+            new_ticket.response = f"New password: {staff_id}_{name}"
+            new_ticket.status = "Closed"
+            self.closed_tickets += 1
+        else:
+            self.open_tickets += 1
+        return new_ticket
+
+
+#  The function gives user an option to response to tickets
+
+
+    def respond_to_ticket(self, ticket_id, response):
+        for ticket in self.tickets:
+            if ticket.ticket_id == ticket_id:
+                if ticket.status == "Open" and "Password Change" in ticket.description:
+                    ticket.status = "Closed"
+                    self.open_tickets -= 1
+                    self.closed_tickets += 1
+                elif ticket.status == "Closed":
+                    ticket.status = "Reopened"
+                    self.open_tickets += 1
+                    self.closed_tickets -= 1
+                ticket.response = response
+                break
+
+
+# The function is used to show the full display of the ticket the user has created 
+    def display_ticket(self, ticket_id):
+        for ticket in self.tickets:
+            if ticket.ticket_id == ticket_id:
+                print(ticket)
+                break
+
+
+# Total ticket displayed with the amount of resolved and open tickets
+
+
+    def display_statistics(self):
+        print(f"Total Tickets: {len(self.tickets)}")
+        print(f"Open Tickets: {self.open_tickets}")
+        print(f"Closed Tickets: {self.closed_tickets}")
+
+
+
+def main():
+    helpdesk = HelpdeskSystem()
+
+
+
+    # Submitting three support tickets
+    ticket1 = helpdesk.submit_ticket(101, "User101", "user1@example.com", "Internet is down")
+    ticket2 = helpdesk.submit_ticket(102, "User102", "user2@example.com", "Can't access email")
+    ticket3 = helpdesk.submit_ticket(103, "User103", "user3@example.com", "Password Change")
+
+
+
+    # Displaying ticket statistics
+    helpdesk.display_statistics()
+
+
+
+    # Resolving two tickets
+    helpdesk.respond_to_ticket(ticket1.ticket_id, "Internet issue resolved")
+    helpdesk.respond_to_ticket(ticket2.ticket_id, "Email access issue resolved")
+
+
+
+    # Reopening one ticket
+    helpdesk.respond_to_ticket(ticket3.ticket_id, "Password changed successfully")
+
+
+
+    # Displaying all three tickets
+    helpdesk.display_ticket(ticket1.ticket_id)
+    helpdesk.display_ticket(ticket2.ticket_id)
+    helpdesk.display_ticket(ticket3.ticket_id)
+
+
+
+    # Displaying ticket statistics again
+    helpdesk.display_statistics()
+
+
+
+if __name__ == "__main__":
+    main()
